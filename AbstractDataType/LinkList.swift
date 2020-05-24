@@ -32,7 +32,13 @@ class LinkList <Element>: NSObject {
      Describe current node
      */
     func describe() -> String {
-        let desc = "val: \(self.value)"
+        var desc = "[\(self.value)] ->"
+        
+        if let _next = self.next {
+            desc = "\(desc) [\(_next.value)]"
+        } else {
+            desc = "\(desc) [null]"
+        }
         return desc;
     }
     

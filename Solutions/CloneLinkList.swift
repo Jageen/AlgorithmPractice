@@ -35,14 +35,10 @@
  LinkListExt.travel(head: clone);
  
  Output
- val: 1
-  rand: 2
- val: 2
-  rand: 2
- val: 3
-  rand: 2
- val: 4
-  rand: 2
+ [1] -> [2] | random -> [2]
+ [2] -> [3] | random -> [2]
+ [3] -> [4] | random -> [2]
+ [4] -> [null] | random -> [2]
  */
 
 import Foundation
@@ -122,7 +118,7 @@ class LinkListExt: LinkList<Int> {
         var desc = super.describe();
         
         if let _rand = self.random {
-            desc = "\(desc) \n rand: \(_rand.value)";
+            desc = "\(desc) | random -> [\(_rand.value)]";
         }
         
         return desc;
