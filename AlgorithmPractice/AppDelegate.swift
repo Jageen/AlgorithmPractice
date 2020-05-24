@@ -13,24 +13,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
-        let node1 = LinkListExt(value: 1, next: nil)
-        let node2 = LinkListExt(value: 2, next: nil)
-        let node3 = LinkListExt(value: 3, next: nil)
-        let node4 = LinkListExt(value: 4, next: nil)
-        
-        node1.next = node2;
-        node1.random = node4;
-        
-        node2.next = node3;
-        node2.random = node1;
-        
-        node3.next = node4;
-        node3.random = node2;
-        
-        node4.random = node3;
-        
-        
         return true
     }
 
