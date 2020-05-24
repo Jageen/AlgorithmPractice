@@ -11,7 +11,7 @@ import Foundation
 /**
  Represent link list datatype
  */
-class LinkList <Element> {
+class LinkList <Element>: NSObject {
     /// Store value
     var value:Element;
     /// Store pointer of next node
@@ -42,10 +42,21 @@ class LinkList <Element> {
         - head: Head pointer. i.e. starting position
      */
     static func travel(head:LinkList<Element>) {
-        var start: LinkList<Element>? = head;
-        while(start != nil) {
-            print(start?.describe() ?? "null");
-            start = start?.next
+        /// A object which will travel each node.
+        var traveler: LinkList<Element>? = head;
+        
+        /// A faster traveler, created to detect cycle in linklist.
+        var rabbit = traveler;
+        while(traveler != nil) {
+            print(traveler?.describe() ?? "null")
+            traveler = traveler?.next
+            rabbit = rabbit?.next?.next
+            
+            if(traveler != nil &&
+                rabbit == traveler) {
+                print("Break travel. \nDetected cycle in current linklist.");
+                break;
+            }
         }
     }
 }
