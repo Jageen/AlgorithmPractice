@@ -29,6 +29,14 @@ class LinkList <Element> {
     }
     
     /**
+     Describe current node
+     */
+    func describe() -> String {
+        let desc = "val: \(self.value)"
+        return desc;
+    }
+    
+    /**
      Travel linkklit from given head and print it's value
      - Parameters:
         - head: Head pointer. i.e. starting position
@@ -36,7 +44,7 @@ class LinkList <Element> {
     static func travel(head:LinkList<Element>) {
         var start: LinkList<Element>? = head;
         while(start != nil) {
-            print(start?.value ?? "null");
+            print(start?.describe() ?? "null");
             start = start?.next
         }
     }
