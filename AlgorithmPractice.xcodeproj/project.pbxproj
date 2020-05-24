@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		361212CD24799149000B150F /* CloneLinkList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 361212CC24799149000B150F /* CloneLinkList.swift */; };
 		36B43BBC24797916003D83B9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36B43BBB24797916003D83B9 /* AppDelegate.swift */; };
 		36B43BBE24797916003D83B9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36B43BBD24797916003D83B9 /* SceneDelegate.swift */; };
 		36B43BC024797916003D83B9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36B43BBF24797916003D83B9 /* ViewController.swift */; };
@@ -23,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		361212CC24799149000B150F /* CloneLinkList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloneLinkList.swift; sourceTree = "<group>"; };
 		36B43BB824797916003D83B9 /* AlgorithmPractice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AlgorithmPractice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		36B43BBB24797916003D83B9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		36B43BBD24797916003D83B9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 				36B43BD924797A3F003D83B9 /* MaxStack.swift */,
 				36B43BDB24797A44003D83B9 /* PostfixExp.swift */,
 				36B43BDD24797A49003D83B9 /* QueueStack.swift */,
+				361212CC24799149000B150F /* CloneLinkList.swift */,
 			);
 			path = Solutions;
 			sourceTree = "<group>";
@@ -180,6 +183,7 @@
 				36B43BD5247979E3003D83B9 /* Queue.swift in Sources */,
 				36B43BC024797916003D83B9 /* ViewController.swift in Sources */,
 				36B43BD4247979E3003D83B9 /* LinkList.swift in Sources */,
+				361212CD24799149000B150F /* CloneLinkList.swift in Sources */,
 				36B43BDA24797A3F003D83B9 /* MaxStack.swift in Sources */,
 				36B43BDC24797A44003D83B9 /* PostfixExp.swift in Sources */,
 				36B43BBC24797916003D83B9 /* AppDelegate.swift in Sources */,
