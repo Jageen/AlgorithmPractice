@@ -57,4 +57,21 @@ class TNode<Element>: CustomStringConvertible {
         self.children.append(node);
         node.parent = self;
     }
+    
+    /**
+     Trave in tree structure.
+     Travel will start from current node will go deeper.
+     
+     First it will visit self then look for children.
+     
+     - Parameters:
+        - completion: callback witch will pass travelled node as parameter. And in return it will ask abuot it should continue travel or not. Default is true.
+     */
+    func travel(completion: ((_ element:TNode<Element>) -> Bool)? = nil) -> Void {
+        if let _ = completion?(self) {
+            for aChild in self.children {
+                aChild.travel(completion: completion);
+            }
+        }
+    }
 }
