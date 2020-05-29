@@ -21,6 +21,8 @@
 		36B43BDA24797A3F003D83B9 /* MaxStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36B43BD924797A3F003D83B9 /* MaxStack.swift */; };
 		36B43BDC24797A44003D83B9 /* PostfixExp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36B43BDB24797A44003D83B9 /* PostfixExp.swift */; };
 		36B43BDE24797A49003D83B9 /* QueueStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36B43BDD24797A49003D83B9 /* QueueStack.swift */; };
+		36FB554324818347003EF708 /* Tree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36FB554124818347003EF708 /* Tree.swift */; };
+		36FB554424818347003EF708 /* BSTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36FB554224818347003EF708 /* BSTree.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +42,8 @@
 		36B43BD924797A3F003D83B9 /* MaxStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MaxStack.swift; sourceTree = "<group>"; };
 		36B43BDB24797A44003D83B9 /* PostfixExp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostfixExp.swift; sourceTree = "<group>"; };
 		36B43BDD24797A49003D83B9 /* QueueStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueueStack.swift; sourceTree = "<group>"; };
+		36FB554124818347003EF708 /* Tree.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tree.swift; sourceTree = "<group>"; };
+		36FB554224818347003EF708 /* BSTree.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BSTree.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +92,8 @@
 		36B43BCF2479798F003D83B9 /* AbstractDataType */ = {
 			isa = PBXGroup;
 			children = (
+				36FB554224818347003EF708 /* BSTree.swift */,
+				36FB554124818347003EF708 /* Tree.swift */,
 				36B43BD1247979E3003D83B9 /* LinkList.swift */,
 				36B43BD2247979E3003D83B9 /* Queue.swift */,
 				36B43BD0247979E3003D83B9 /* Stack.swift */,
@@ -183,10 +189,12 @@
 				36B43BD5247979E3003D83B9 /* Queue.swift in Sources */,
 				36B43BC024797916003D83B9 /* ViewController.swift in Sources */,
 				36B43BD4247979E3003D83B9 /* LinkList.swift in Sources */,
+				36FB554424818347003EF708 /* BSTree.swift in Sources */,
 				361212CD24799149000B150F /* CloneLinkList.swift in Sources */,
 				36B43BDA24797A3F003D83B9 /* MaxStack.swift in Sources */,
 				36B43BDC24797A44003D83B9 /* PostfixExp.swift in Sources */,
 				36B43BBC24797916003D83B9 /* AppDelegate.swift in Sources */,
+				36FB554324818347003EF708 /* Tree.swift in Sources */,
 				36B43BDE24797A49003D83B9 /* QueueStack.swift in Sources */,
 				36B43BBE24797916003D83B9 /* SceneDelegate.swift in Sources */,
 			);
