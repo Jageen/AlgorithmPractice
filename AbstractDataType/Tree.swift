@@ -34,6 +34,12 @@ class TNode<Element>: CustomStringConvertible {
         }
         return text
     }
+    
+    /// Default completion for travel method
+    private let defCompletion = { (aNode:TNode<Element>) -> Bool in
+        print(aNode.value);
+        return true;
+    }
 
     /**
      Initialize object.
@@ -68,7 +74,9 @@ class TNode<Element>: CustomStringConvertible {
         - completion: callback witch will pass travelled node as parameter. And in return it will ask abuot it should continue travel or not. Default is true.
      */
     func travel(completion: ((_ element:TNode<Element>) -> Bool)? = nil) -> Void {
-        if let _ = completion?(self) {
+        let _completion = completion ?? self.defCompletion;
+        
+        if _completion(self) {
             for aChild in self.children {
                 aChild.travel(completion: completion);
             }
