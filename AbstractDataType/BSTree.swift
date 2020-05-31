@@ -32,9 +32,36 @@ class BSTNode: CustomStringConvertible {
     /// Represent right child
     var right: BSTNode?
     
+    /// Hold parent node value.
+    fileprivate var parent: BSTNode?
+    
     /// Print tree structure
     var description: String {
         return "\(value)"
+    }
+    
+    /// Return miminum value node from it's sub stree
+    fileprivate var miminum: BSTNode {
+        var _minNode = self;
+        self.travel { (aNode) -> Bool in
+            if(_minNode.value > aNode.value) {
+                _minNode = aNode;
+            }
+            return true;
+        }
+        return _minNode;
+    }
+    
+    /// Return maximum value node from it's sub stree
+    fileprivate var maximum: BSTNode {
+        var _minNode = self;
+        self.travel { (aNode) -> Bool in
+            if(_minNode.value < aNode.value) {
+                _minNode = aNode;
+            }
+            return true;
+        }
+        return _minNode;
     }
     
     /// Default completion for travel method
@@ -52,6 +79,13 @@ class BSTNode: CustomStringConvertible {
         self.value = value;
     }
     
+    init(node:BSTNode) {
+        self.value = node.value;
+        self.left = node.left;
+        self.right = node.right;
+        self.parent = node.parent;
+    }
+    
     /**
      Travel Binary tree from given node
      - Parameters:
@@ -63,13 +97,64 @@ class BSTNode: CustomStringConvertible {
             self.right?.travel(completion:completion);
         }
     }
+    
+    /**
+     Delink node.
+     - Parameters:
+        - aNode: Node you want to delink, pass nill if you want to delink self.
+     
+     - Returns: Node which is delinked from, nill in case of no parent exists.
+     
+     If you pass child node to delink it will not dive deeper but instead only check of immidiate child (i.e left or right
+     */
+    fileprivate func delink() -> BSTNode? {
+        
+        if(self.left !== nil && self.right !== nil) {
+            let newTarget = self.right!.miminum;
+            self.value = newTarget.value;
+            return newTarget.delink();
+        } else {
+            if let _parent = self.parent {
+                _parent.delink(aNode: self);
+                return self;
+            } else {
+                return nil;
+            }
+        }
+    }
+    
+    /**
+     Delink child node from self.
+     - Parameters:
+        - aNode: Node you want to delink self from.
+     
+     It will only delink immidiate child (left or right), i.e It not going to dive deeprer to find node.
+     */
+    private func delink(aNode: BSTNode) {
+        if(self.left === aNode) {
+            self.left = aNode.left ?? aNode.right;
+        } else if (self.right === aNode) {
+            self.right = aNode.left ?? aNode.right;
+        }
+    }
 }
 
 /**
  Represent Binary search tree
  */
 class BSTree {
-    var root: BSTNode
+    /// Hold root node
+    var root: BSTNode?
+    
+    /// return minimum node from binary serch tree
+    var minimum: BSTNode? {
+        return root?.miminum;
+    }
+    
+    /// return maximum node from binary serch tree
+    var maximum: BSTNode? {
+        return root?.maximum;
+    }
     
     /**
      Initialize Binary tree with given value.
@@ -79,17 +164,22 @@ class BSTree {
     init(value: Int) {
         root = BSTNode(value: value);
     }
+
     /**
      Add new node into binary tree
      - Parameters: new node
      */
     func addValue(value:Int) {
         let newNode = BSTNode(value: value);
-        let parentNode = self.searchForPlace(aNode: newNode);
-        if(parentNode.value >= value) {
-            parentNode.left = newNode
+        if let parentNode = self.searchForPlace(aNode: newNode) {
+            if(parentNode.value > value) {
+                parentNode.left = newNode
+            } else {
+                parentNode.right = newNode;
+            }
+            newNode.parent = parentNode;
         } else {
-            parentNode.right = newNode;
+            root = newNode;
         }
     }
     
@@ -98,13 +188,13 @@ class BSTree {
      - Parameters:
         - aNode: a Node for which you want to search place.
      */
-    private func searchForPlace(aNode:BSTNode) -> BSTNode {
+    private func searchForPlace(aNode:BSTNode) -> BSTNode? {
         
         var tmpRoot:BSTNode? = root;
-        var parentNode: BSTNode = root;
+        var parentNode: BSTNode? = root;
         while tmpRoot != nil {
             parentNode = tmpRoot!;
-            if(tmpRoot!.value >= aNode.value) {
+            if(tmpRoot!.value > aNode.value) {
                 tmpRoot = tmpRoot!.left;
             } else {
                 tmpRoot = tmpRoot!.right;
@@ -125,8 +215,10 @@ class BSTree {
         It will return first node found with given value.
      */
     func search(target: Int) -> BSTNode? {
+        guard let _root = self.root else{
+            return nil;
+        }
         var searchedNode:BSTNode? = nil;
-        let _root = self.root;
         
         _root.travel { (aNode) -> Bool in
             if(aNode.value == target) {
@@ -136,5 +228,21 @@ class BSTree {
         }
         
         return searchedNode;
+    }
+    
+    /**
+     Remove value from binary search tree
+     - Parameters:
+        - value: value you want to delete.
+     */
+    func delete(value:Int) {
+        let valueNode:BSTNode? = self.search(target: value)
+        var nodeForDelete:BSTNode? = valueNode?.delink() ?? self.root;
+        
+        // If root is going to delete
+        if(nodeForDelete === self.root) {
+            self.root = nodeForDelete?.left ?? nodeForDelete?.right
+        }
+        nodeForDelete = nil;
     }
 }
