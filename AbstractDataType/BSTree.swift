@@ -32,9 +32,36 @@ class BSTNode: CustomStringConvertible {
     /// Represent right child
     var right: BSTNode?
     
+    /// Hold parent node value.
+    fileprivate var parent: BSTNode?
+    
     /// Print tree structure
     var description: String {
         return "\(value)"
+    }
+    
+    /// Return miminum value node from it's sub stree
+    fileprivate var miminum: BSTNode {
+        var _minNode = self;
+        self.travel { (aNode) -> Bool in
+            if(_minNode.value > aNode.value) {
+                _minNode = aNode;
+            }
+            return true;
+        }
+        return _minNode;
+    }
+    
+    /// Return maximum value node from it's sub stree
+    fileprivate var maximum: BSTNode {
+        var _minNode = self;
+        self.travel { (aNode) -> Bool in
+            if(_minNode.value < aNode.value) {
+                _minNode = aNode;
+            }
+            return true;
+        }
+        return _minNode;
     }
     
     /// Default completion for travel method
@@ -50,6 +77,13 @@ class BSTNode: CustomStringConvertible {
      */
     init(value:Int) {
         self.value = value;
+    }
+    
+    init(node:BSTNode) {
+        self.value = node.value;
+        self.left = node.left;
+        self.right = node.right;
+        self.parent = node.parent;
     }
     
     /**
@@ -69,7 +103,18 @@ class BSTNode: CustomStringConvertible {
  Represent Binary search tree
  */
 class BSTree {
+    /// Hold root node
     var root: BSTNode
+    
+    /// return minimum node from binary serch tree
+    var minimum: BSTNode {
+        return root.miminum;
+    }
+    
+    /// return maximum node from binary serch tree
+    var maximum: BSTNode {
+        return root.maximum;
+    }
     
     /**
      Initialize Binary tree with given value.
@@ -79,6 +124,7 @@ class BSTree {
     init(value: Int) {
         root = BSTNode(value: value);
     }
+
     /**
      Add new node into binary tree
      - Parameters: new node
@@ -86,11 +132,12 @@ class BSTree {
     func addValue(value:Int) {
         let newNode = BSTNode(value: value);
         let parentNode = self.searchForPlace(aNode: newNode);
-        if(parentNode.value >= value) {
+        if(parentNode.value > value) {
             parentNode.left = newNode
         } else {
             parentNode.right = newNode;
         }
+        newNode.parent = parentNode;
     }
     
     /**
@@ -104,7 +151,7 @@ class BSTree {
         var parentNode: BSTNode = root;
         while tmpRoot != nil {
             parentNode = tmpRoot!;
-            if(tmpRoot!.value >= aNode.value) {
+            if(tmpRoot!.value > aNode.value) {
                 tmpRoot = tmpRoot!.left;
             } else {
                 tmpRoot = tmpRoot!.right;
@@ -136,5 +183,53 @@ class BSTree {
         }
         
         return searchedNode;
+    }
+    
+    /**
+     Remove value from binary search tree
+     - Parameters:
+        - value: value you want to delete.
+     */
+    func delete(value:Int) {
+        var valueNode:BSTNode? = self.search(target: value)
+        self.delete(aNode: &valueNode);
+    }
+    
+    /**
+     Delete node from binary search tree
+     - Parameters:
+        aNode: Node you want to delete from tree
+     */
+    private func delete( aNode:inout BSTNode?) {
+        guard let _aNode = aNode else {
+            return;
+        }
+        
+        if(_aNode.left == nil && _aNode.right == nil) {
+            if(_aNode.parent!.value > _aNode.value) {
+                _aNode.parent?.left = nil;
+            } else {
+                _aNode.parent?.right = nil;
+            }
+            aNode = nil;
+        } else if(_aNode.left == nil && _aNode.right != nil) {
+            if(_aNode.parent!.value > _aNode.value) {
+                _aNode.parent?.left = _aNode.right;
+            } else {
+                _aNode.parent?.right = _aNode.right;
+            }
+            aNode = nil;
+        } else if(_aNode.left != nil && _aNode.right == nil) {
+            if(_aNode.parent!.value > _aNode.value) {
+                _aNode.parent?.left = _aNode.left;
+            } else {
+                _aNode.parent?.right = _aNode.left;
+            }
+            aNode = nil;
+        } else if (_aNode.left != nil && _aNode.right != nil) {
+            var min: BSTNode? = _aNode.right!.miminum;
+            _aNode.value = min!.value;
+            self.delete(aNode: &min);
+        }
     }
 }
