@@ -97,6 +97,40 @@ class BSTNode: CustomStringConvertible {
             self.right?.travel(completion:completion);
         }
     }
+    
+    /**
+     Delink node.
+     - Parameters:
+        - aNode: Node you want to delink, pass nill if you want to delink self.
+     
+     - Returns:
+     
+     If you pass child node to delink it will not dive deeper but instead only check of immidiate child (i.e left or right
+     */
+    fileprivate func delink() -> BSTNode? {
+        
+        if(self.left !== nil && self.right !== nil) {
+            let newTarget = self.right!.miminum;
+            self.value = newTarget.value;
+            return newTarget.delink();
+        } else {
+            if let _parent = self.parent {
+                _parent.delink(aNode: self);
+                return self;
+            } else {
+                print("Deleting root");
+                return nil;
+            }
+        }
+    }
+    
+    private func delink(aNode: BSTNode) {
+        if(self.left === aNode) {
+            self.left = aNode.left ?? aNode.right;
+        } else if (self.right === aNode) {
+            self.right = aNode.left ?? aNode.right;
+        }
+    }
 }
 
 /**
@@ -191,8 +225,15 @@ class BSTree {
         - value: value you want to delete.
      */
     func delete(value:Int) {
-        var valueNode:BSTNode? = self.search(target: value)
-        self.delete(aNode: &valueNode);
+        let valueNode:BSTNode? = self.search(target: value)
+        var nodeForDelete:BSTNode? = valueNode?.delink() ?? self.root;
+        
+        // If root is going to delete
+        if(nodeForDelete === self.root) {
+            print("Root node is changed")
+            self.root = nodeForDelete?.left ?? nodeForDelete?.right ?? BSTNode(value: 0);
+        }
+        nodeForDelete = nil;
     }
     
     /**
@@ -200,36 +241,39 @@ class BSTree {
      - Parameters:
         aNode: Node you want to delete from tree
      */
-    private func delete( aNode:inout BSTNode?) {
-        guard let _aNode = aNode else {
-            return;
-        }
-        
-        if(_aNode.left == nil && _aNode.right == nil) {
-            if(_aNode.parent!.value > _aNode.value) {
-                _aNode.parent?.left = nil;
-            } else {
-                _aNode.parent?.right = nil;
-            }
-            aNode = nil;
-        } else if(_aNode.left == nil && _aNode.right != nil) {
-            if(_aNode.parent!.value > _aNode.value) {
-                _aNode.parent?.left = _aNode.right;
-            } else {
-                _aNode.parent?.right = _aNode.right;
-            }
-            aNode = nil;
-        } else if(_aNode.left != nil && _aNode.right == nil) {
-            if(_aNode.parent!.value > _aNode.value) {
-                _aNode.parent?.left = _aNode.left;
-            } else {
-                _aNode.parent?.right = _aNode.left;
-            }
-            aNode = nil;
-        } else if (_aNode.left != nil && _aNode.right != nil) {
-            var min: BSTNode? = _aNode.right!.miminum;
-            _aNode.value = min!.value;
-            self.delete(aNode: &min);
-        }
-    }
+//    private func delete( aNode:inout BSTNode?) {
+//        guard let _aNode = aNode else {
+//            return;
+//        }
+//
+//        if let _parent = _aNode.parent {
+//            _parent.delink(aNode: _aNode)
+//        } else {
+//            // Its root not
+//            print("Root node deleted")
+//            _aNode.delink(aNode:_aNode);
+//        }
+////        if(_aNode.left == nil && _aNode.right == nil) {
+////            _aNode.parent?.delink(aNode: _aNode);
+////            aNode = nil;
+////        } else if(_aNode.left == nil && _aNode.right != nil) {
+////            if(_aNode.parent!.value > _aNode.value) {
+////                _aNode.parent?.left = _aNode.right;
+////            } else {
+////                _aNode.parent?.right = _aNode.right;
+////            }
+////            aNode = nil;
+////        } else if(_aNode.left != nil && _aNode.right == nil) {
+////            if(_aNode.parent!.value > _aNode.value) {
+////                _aNode.parent?.left = _aNode.left;
+////            } else {
+////                _aNode.parent?.right = _aNode.left;
+////            }
+////            aNode = nil;
+////        } else if (_aNode.left != nil && _aNode.right != nil) {
+////            var min: BSTNode? = _aNode.right!.miminum;
+////            _aNode.value = min!.value;
+////            self.delete(aNode: &min);
+////        }
+//    }
 }
