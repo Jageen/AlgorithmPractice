@@ -103,7 +103,7 @@ class BSTNode: CustomStringConvertible {
      - Parameters:
         - aNode: Node you want to delink, pass nill if you want to delink self.
      
-     - Returns:
+     - Returns: Node which is delinked from, nill in case of no parent exists.
      
      If you pass child node to delink it will not dive deeper but instead only check of immidiate child (i.e left or right
      */
@@ -118,12 +118,18 @@ class BSTNode: CustomStringConvertible {
                 _parent.delink(aNode: self);
                 return self;
             } else {
-                print("Deleting root");
                 return nil;
             }
         }
     }
     
+    /**
+     Delink child node from self.
+     - Parameters:
+        - aNode: Node you want to delink self from.
+     
+     It will only delink immidiate child (left or right), i.e It not going to dive deeprer to find node.
+     */
     private func delink(aNode: BSTNode) {
         if(self.left === aNode) {
             self.left = aNode.left ?? aNode.right;
@@ -138,16 +144,16 @@ class BSTNode: CustomStringConvertible {
  */
 class BSTree {
     /// Hold root node
-    var root: BSTNode
+    var root: BSTNode?
     
     /// return minimum node from binary serch tree
-    var minimum: BSTNode {
-        return root.miminum;
+    var minimum: BSTNode? {
+        return root?.miminum;
     }
     
     /// return maximum node from binary serch tree
-    var maximum: BSTNode {
-        return root.maximum;
+    var maximum: BSTNode? {
+        return root?.maximum;
     }
     
     /**
@@ -165,13 +171,16 @@ class BSTree {
      */
     func addValue(value:Int) {
         let newNode = BSTNode(value: value);
-        let parentNode = self.searchForPlace(aNode: newNode);
-        if(parentNode.value > value) {
-            parentNode.left = newNode
+        if let parentNode = self.searchForPlace(aNode: newNode) {
+            if(parentNode.value > value) {
+                parentNode.left = newNode
+            } else {
+                parentNode.right = newNode;
+            }
+            newNode.parent = parentNode;
         } else {
-            parentNode.right = newNode;
+            root = newNode;
         }
-        newNode.parent = parentNode;
     }
     
     /**
@@ -179,10 +188,10 @@ class BSTree {
      - Parameters:
         - aNode: a Node for which you want to search place.
      */
-    private func searchForPlace(aNode:BSTNode) -> BSTNode {
+    private func searchForPlace(aNode:BSTNode) -> BSTNode? {
         
         var tmpRoot:BSTNode? = root;
-        var parentNode: BSTNode = root;
+        var parentNode: BSTNode? = root;
         while tmpRoot != nil {
             parentNode = tmpRoot!;
             if(tmpRoot!.value > aNode.value) {
@@ -206,8 +215,10 @@ class BSTree {
         It will return first node found with given value.
      */
     func search(target: Int) -> BSTNode? {
+        guard let _root = self.root else{
+            return nil;
+        }
         var searchedNode:BSTNode? = nil;
-        let _root = self.root;
         
         _root.travel { (aNode) -> Bool in
             if(aNode.value == target) {
@@ -230,50 +241,8 @@ class BSTree {
         
         // If root is going to delete
         if(nodeForDelete === self.root) {
-            print("Root node is changed")
-            self.root = nodeForDelete?.left ?? nodeForDelete?.right ?? BSTNode(value: 0);
+            self.root = nodeForDelete?.left ?? nodeForDelete?.right
         }
         nodeForDelete = nil;
     }
-    
-    /**
-     Delete node from binary search tree
-     - Parameters:
-        aNode: Node you want to delete from tree
-     */
-//    private func delete( aNode:inout BSTNode?) {
-//        guard let _aNode = aNode else {
-//            return;
-//        }
-//
-//        if let _parent = _aNode.parent {
-//            _parent.delink(aNode: _aNode)
-//        } else {
-//            // Its root not
-//            print("Root node deleted")
-//            _aNode.delink(aNode:_aNode);
-//        }
-////        if(_aNode.left == nil && _aNode.right == nil) {
-////            _aNode.parent?.delink(aNode: _aNode);
-////            aNode = nil;
-////        } else if(_aNode.left == nil && _aNode.right != nil) {
-////            if(_aNode.parent!.value > _aNode.value) {
-////                _aNode.parent?.left = _aNode.right;
-////            } else {
-////                _aNode.parent?.right = _aNode.right;
-////            }
-////            aNode = nil;
-////        } else if(_aNode.left != nil && _aNode.right == nil) {
-////            if(_aNode.parent!.value > _aNode.value) {
-////                _aNode.parent?.left = _aNode.left;
-////            } else {
-////                _aNode.parent?.right = _aNode.left;
-////            }
-////            aNode = nil;
-////        } else if (_aNode.left != nil && _aNode.right != nil) {
-////            var min: BSTNode? = _aNode.right!.miminum;
-////            _aNode.value = min!.value;
-////            self.delete(aNode: &min);
-////        }
-//    }
 }
