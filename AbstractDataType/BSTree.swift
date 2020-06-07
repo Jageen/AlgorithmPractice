@@ -138,6 +138,61 @@ class BSTNode: CustomStringConvertible {
     }
     
     /**
+     Indicate whether given tree is balanced or not.
+     */
+    fileprivate var isBalanced:Bool {
+        get {
+            let leftHeight = self.left?.height ?? -1
+            let rightHeight = self.right?.height ?? -1
+            let diff = abs(leftHeight - rightHeight)
+            return (diff <= 1);
+        }
+    }
+    
+    /**
+     Peform left rotation
+     */
+    fileprivate func leftRotate() -> BSTNode? {
+        
+        if let _ = self.right?.left {
+            self.right = self.right?.rightRotate();
+        }
+        
+        // If It does not have right child then return
+        guard let rightChild = self.right else {
+            return nil;
+        }
+        
+        if let _ = rightChild.left {
+            let _ = rightChild.rightRotate();
+        }
+        
+        rightChild.parent = self.parent;
+        rightChild.left = self;
+        self.right = nil;
+        return rightChild;
+    }
+    
+    /**
+     Peform right rotation
+     */
+    fileprivate func rightRotate() -> BSTNode? {
+        if let _ = self.left?.right {
+            self.left = self.left?.leftRotate();
+        }
+        
+        // If It does not have left child then return
+        guard let leftChild = self.left else {
+            return nil;
+        }
+        
+        leftChild.parent = self.parent;
+        leftChild.right = self;
+        self.left = nil;
+        return leftChild;
+    }
+    
+    /**
      Delink child node from self.
      - Parameters:
         - aNode: Node you want to delink self from.
@@ -177,6 +232,15 @@ class BSTree {
      */
     var height: Int {
         return root?.height ?? -1;
+    }
+    
+    /**
+    Indicate whether given tree is balanced or not.
+    */
+    var isBalanced:Bool {
+        get {
+            return self.root?.isBalanced ?? false;
+        }
     }
     /**
      Initialize Binary tree with given value.
@@ -266,5 +330,42 @@ class BSTree {
             self.root = nodeForDelete?.left ?? nodeForDelete?.right
         }
         nodeForDelete = nil;
+    }
+    
+    /**
+     Rotate give node to left
+     - Parameters:
+        - node: Node you want to rotate. It will consider root in case of nill
+     */
+    func leftRotate(node: BSTNode?) -> Void {
+        let targetNode = node ?? self.root;
+        
+        guard targetNode != nil else {
+            return;
+        }
+        let rotatedNode = targetNode?.leftRotate();
+        
+        if(rotatedNode?.parent == nil) {
+            self.root = rotatedNode;
+        }
+    }
+    
+    /**
+    Rotate give node to right
+    - Parameters:
+       - node: Node you want to rotate. It will consider root in case of nill
+    */
+    func rightRotate(node: BSTNode?) -> Void {
+        let targetNode = node ?? self.root;
+        
+        guard targetNode != nil else {
+            return;
+        }
+        
+        let rotatedNode = targetNode?.rightRotate();
+        
+        if(rotatedNode?.parent == nil) {
+            self.root = rotatedNode;
+        }
     }
 }
