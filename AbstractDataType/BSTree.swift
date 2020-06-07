@@ -25,21 +25,10 @@
 import Foundation
 
 class BSTNode: CustomStringConvertible {
-    /// Hold node value
-    var value: Int;
-    /// Represent left child
-    var left: BSTNode?
-    /// Represent right child
-    var right: BSTNode?
-    
+
     /// Hold parent node value.
     fileprivate var parent: BSTNode?
-    
-    /// Print tree structure
-    var description: String {
-        return "\(value)"
-    }
-    
+
     /// Return miminum value node from it's sub stree
     fileprivate var miminum: BSTNode {
         var _minNode = self;
@@ -52,6 +41,18 @@ class BSTNode: CustomStringConvertible {
         return _minNode;
     }
     
+    /**
+     Indicate whether given tree is balanced or not.
+     */
+    fileprivate var isBalanced:Bool {
+        get {
+            let leftHeight = self.left?.height ?? -1
+            let rightHeight = self.right?.height ?? -1
+            let diff = abs(leftHeight - rightHeight)
+            return (diff <= 1);
+        }
+    }
+
     /// Return maximum value node from it's sub stree
     fileprivate var maximum: BSTNode {
         var _minNode = self;
@@ -62,6 +63,24 @@ class BSTNode: CustomStringConvertible {
             return true;
         }
         return _minNode;
+    }
+
+    /// Default completion for travel method
+    static private let defCompletion = { (aNode:BSTNode) -> Bool in
+        print("\(aNode) : |L|->\(aNode.left?.description ?? "nil") |R|->\(aNode.right?.description ?? "nil")");
+        return true;
+    }
+    
+    /// Hold node value
+    var value: Int;
+    /// Represent left child
+    var left: BSTNode?
+    /// Represent right child
+    var right: BSTNode?
+    
+    /// Print tree structure
+    var description: String {
+        return "\(value)"
     }
     
     /**
@@ -78,12 +97,7 @@ class BSTNode: CustomStringConvertible {
         let maxChildHeight = max(leftChildHegiht, rightChildHegiht);
         return maxChildHeight + 1;
     }
-    /// Default completion for travel method
-    static private let defCompletion = { (aNode:BSTNode) -> Bool in
-        print("\(aNode) : |L|->\(aNode.left?.description ?? "nil") |R|->\(aNode.right?.description ?? "nil")");
-        return true;
-    }
-    
+
     /**
      Initiallize node.
      - Parameters:
@@ -100,6 +114,21 @@ class BSTNode: CustomStringConvertible {
         self.parent = node.parent;
     }
     
+    /**
+     Delink child node from self.
+     - Parameters:
+        - aNode: Node you want to delink self from.
+     
+     It will only delink immidiate child (left or right), i.e It not going to dive deeprer to find node.
+     */
+    private func delink(aNode: BSTNode) {
+        if(self.left === aNode) {
+            self.left = aNode.left ?? aNode.right;
+        } else if (self.right === aNode) {
+            self.right = aNode.left ?? aNode.right;
+        }
+    }
+
     /**
      Travel Binary tree from given node
      - Parameters:
@@ -134,18 +163,6 @@ class BSTNode: CustomStringConvertible {
             } else {
                 return nil;
             }
-        }
-    }
-    
-    /**
-     Indicate whether given tree is balanced or not.
-     */
-    fileprivate var isBalanced:Bool {
-        get {
-            let leftHeight = self.left?.height ?? -1
-            let rightHeight = self.right?.height ?? -1
-            let diff = abs(leftHeight - rightHeight)
-            return (diff <= 1);
         }
     }
     
@@ -190,21 +207,6 @@ class BSTNode: CustomStringConvertible {
         leftChild.right = self;
         self.left = nil;
         return leftChild;
-    }
-    
-    /**
-     Delink child node from self.
-     - Parameters:
-        - aNode: Node you want to delink self from.
-     
-     It will only delink immidiate child (left or right), i.e It not going to dive deeprer to find node.
-     */
-    private func delink(aNode: BSTNode) {
-        if(self.left === aNode) {
-            self.left = aNode.left ?? aNode.right;
-        } else if (self.right === aNode) {
-            self.right = aNode.left ?? aNode.right;
-        }
     }
 }
 
@@ -252,24 +254,6 @@ class BSTree {
     }
 
     /**
-     Add new node into binary tree
-     - Parameters: new node
-     */
-    func addValue(value:Int) {
-        let newNode = BSTNode(value: value);
-        if let parentNode = self.searchForPlace(aNode: newNode) {
-            if(parentNode.value > value) {
-                parentNode.left = newNode
-            } else {
-                parentNode.right = newNode;
-            }
-            newNode.parent = parentNode;
-        } else {
-            root = newNode;
-        }
-    }
-    
-    /**
      Search for place where given node can added as child node
      - Parameters:
         - aNode: a Node for which you want to search place.
@@ -287,6 +271,24 @@ class BSTree {
             }
         }
         return parentNode;
+    }
+
+    /**
+     Add new node into binary tree
+     - Parameters: new node
+     */
+    func addValue(value:Int) {
+        let newNode = BSTNode(value: value);
+        if let parentNode = self.searchForPlace(aNode: newNode) {
+            if(parentNode.value > value) {
+                parentNode.left = newNode
+            } else {
+                parentNode.right = newNode;
+            }
+            newNode.parent = parentNode;
+        } else {
+            root = newNode;
+        }
     }
     
     func travel() -> Void {
