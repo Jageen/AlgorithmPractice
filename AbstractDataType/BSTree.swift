@@ -64,6 +64,20 @@ class BSTNode: CustomStringConvertible {
         return _minNode;
     }
     
+    /**
+     Return height of tree.
+     
+     It will calculate height from self node.
+     i.e It will return max(leftNodeHight, rightNodeHeight) + 1.
+     If either left or right node is null it will consider their height as -1.
+     */
+    var height: Int {
+        let leftChildHegiht = self.left?.height ?? -1
+        let rightChildHegiht = self.right?.height ?? -1
+        
+        let maxChildHeight = max(leftChildHegiht, rightChildHegiht);
+        return maxChildHeight + 1;
+    }
     /// Default completion for travel method
     static private let defCompletion = { (aNode:BSTNode) -> Bool in
         print("\(aNode) : |L|->\(aNode.left?.description ?? "nil") |R|->\(aNode.right?.description ?? "nil")");
@@ -156,6 +170,14 @@ class BSTree {
         return root?.maximum;
     }
     
+    /**
+     Return height of tree
+     
+     Return -1 if root is null (i.e tree is empty)
+     */
+    var height: Int {
+        return root?.height ?? -1;
+    }
     /**
      Initialize Binary tree with given value.
      - Parameters:
