@@ -25,21 +25,10 @@
 import Foundation
 
 class BSTNode: CustomStringConvertible {
-    /// Hold node value
-    var value: Int;
-    /// Represent left child
-    var left: BSTNode?
-    /// Represent right child
-    var right: BSTNode?
-    
+
     /// Hold parent node value.
-    fileprivate var parent: BSTNode?
-    
-    /// Print tree structure
-    var description: String {
-        return "\(value)"
-    }
-    
+    internal var parent: BSTNode?
+
     /// Return miminum value node from it's sub stree
     fileprivate var miminum: BSTNode {
         var _minNode = self;
@@ -52,6 +41,18 @@ class BSTNode: CustomStringConvertible {
         return _minNode;
     }
     
+    /**
+     Indicate whether given tree is balanced or not.
+     */
+    internal var isBalanced:Bool {
+        get {
+            let leftHeight = self.left?.height ?? -1
+            let rightHeight = self.right?.height ?? -1
+            let diff = abs(leftHeight - rightHeight)
+            return (diff <= 1);
+        }
+    }
+
     /// Return maximum value node from it's sub stree
     fileprivate var maximum: BSTNode {
         var _minNode = self;
@@ -62,6 +63,44 @@ class BSTNode: CustomStringConvertible {
             return true;
         }
         return _minNode;
+    }
+
+    /// Default completion for travel method
+    static private let defCompletion = { (aNode:BSTNode) -> Bool in
+        print(aNode.description);
+        return true;
+    }
+    
+    /// Hold node value
+    var value: Int;
+    /// Represent left child
+    var left: BSTNode?
+    /// Represent right child
+    var right: BSTNode?
+    
+    /// Print tree structure
+    var description: String {
+        var des = "\(value)";
+        
+        if let _p = self.parent {
+            des = "\(des) : |P|->\(_p.value)"
+        } else {
+            des = "\(des) : |P|->nil"
+        }
+        
+        if let _l = self.left {
+            des = "\(des) : |L|->\(_l.value)"
+        } else {
+            des = "\(des) : |L|->nil"
+        }
+        
+        if let _r = self.right {
+            des = "\(des) : |R|->\(_r.value)"
+        } else {
+            des = "\(des) : |R|->nil"
+        }
+        
+        return des
     }
     
     /**
@@ -78,12 +117,7 @@ class BSTNode: CustomStringConvertible {
         let maxChildHeight = max(leftChildHegiht, rightChildHegiht);
         return maxChildHeight + 1;
     }
-    /// Default completion for travel method
-    static private let defCompletion = { (aNode:BSTNode) -> Bool in
-        print("\(aNode) : |L|->\(aNode.left?.description ?? "nil") |R|->\(aNode.right?.description ?? "nil")");
-        return true;
-    }
-    
+
     /**
      Initiallize node.
      - Parameters:
@@ -100,6 +134,21 @@ class BSTNode: CustomStringConvertible {
         self.parent = node.parent;
     }
     
+    /**
+     Delink child node from self.
+     - Parameters:
+        - aNode: Node you want to delink self from.
+     
+     It will only delink immidiate child (left or right), i.e It not going to dive deeprer to find node.
+     */
+    private func delink(aNode: BSTNode) {
+        if(self.left === aNode) {
+            self.left = aNode.left ?? aNode.right;
+        } else if (self.right === aNode) {
+            self.right = aNode.left ?? aNode.right;
+        }
+    }
+
     /**
      Travel Binary tree from given node
      - Parameters:
@@ -138,18 +187,74 @@ class BSTNode: CustomStringConvertible {
     }
     
     /**
-     Delink child node from self.
-     - Parameters:
-        - aNode: Node you want to delink self from.
-     
-     It will only delink immidiate child (left or right), i.e It not going to dive deeprer to find node.
+     Peform left rotation
      */
-    private func delink(aNode: BSTNode) {
-        if(self.left === aNode) {
-            self.left = aNode.left ?? aNode.right;
-        } else if (self.right === aNode) {
-            self.right = aNode.left ?? aNode.right;
+    fileprivate func leftRotate() -> BSTNode? {
+        if let _ = self.right?.left {
+            self.right = self.right?.rightRotate();
         }
+        
+        // If It does not have right child then return
+        guard var rightChild = self.right else {
+            return nil;
+        }
+        
+        if let _ = rightChild.left {
+            rightChild = rightChild.rightRotate() ?? rightChild;
+        }
+        
+        if let _pRight = self.parent?.right,
+        _pRight.value == self.value{
+            self.parent?.right = rightChild;
+        }
+        
+        if let _pLeft = self.parent?.left,
+        _pLeft.value == self.value{
+            self.parent?.left = rightChild;
+        }
+        
+        rightChild.parent = self.parent;
+        rightChild.left = self;
+        self.parent = rightChild;
+        self.right = nil;
+        
+        return rightChild;
+    }
+    
+    /**
+     Peform right rotation
+     */
+    fileprivate func rightRotate() -> BSTNode? {
+        if let _ = self.left?.right {
+            self.left = self.left?.leftRotate();
+        }
+        
+        // If It does not have left child then return
+        guard var leftChild = self.left else {
+            return nil;
+        }
+        
+        if let _ = leftChild.right {
+            leftChild = leftChild.leftRotate() ?? leftChild;
+        }
+        
+
+        // TODO: Decide to chose left or right
+        if let _pRight = self.parent?.right,
+        _pRight.value == self.value{
+            self.parent?.right = leftChild;
+        }
+        
+        if let _pLeft = self.parent?.left,
+        _pLeft.value == self.value{
+            self.parent?.left = leftChild;
+        }
+        
+        leftChild.parent = self.parent;
+        leftChild.right = self;
+        self.parent = leftChild;
+        self.left = nil;
+        return leftChild;
     }
 }
 
@@ -178,6 +283,15 @@ class BSTree {
     var height: Int {
         return root?.height ?? -1;
     }
+    
+    /**
+    Indicate whether given tree is balanced or not.
+    */
+    var isBalanced:Bool {
+        get {
+            return self.root?.isBalanced ?? false;
+        }
+    }
     /**
      Initialize Binary tree with given value.
      - Parameters:
@@ -187,24 +301,6 @@ class BSTree {
         root = BSTNode(value: value);
     }
 
-    /**
-     Add new node into binary tree
-     - Parameters: new node
-     */
-    func addValue(value:Int) {
-        let newNode = BSTNode(value: value);
-        if let parentNode = self.searchForPlace(aNode: newNode) {
-            if(parentNode.value > value) {
-                parentNode.left = newNode
-            } else {
-                parentNode.right = newNode;
-            }
-            newNode.parent = parentNode;
-        } else {
-            root = newNode;
-        }
-    }
-    
     /**
      Search for place where given node can added as child node
      - Parameters:
@@ -223,6 +319,26 @@ class BSTree {
             }
         }
         return parentNode;
+    }
+
+    /**
+     Add new node into binary tree
+     - Parameters: new node
+     */
+    @discardableResult
+    func addValue(value:Int) -> BSTNode {
+        let newNode = BSTNode(value: value);
+        if let parentNode = self.searchForPlace(aNode: newNode) {
+            if(parentNode.value > value) {
+                parentNode.left = newNode
+            } else {
+                parentNode.right = newNode;
+            }
+            newNode.parent = parentNode;
+        } else {
+            root = newNode;
+        }
+        return newNode;
     }
     
     func travel() -> Void {
@@ -266,5 +382,42 @@ class BSTree {
             self.root = nodeForDelete?.left ?? nodeForDelete?.right
         }
         nodeForDelete = nil;
+    }
+    
+    /**
+     Rotate give node to left
+     - Parameters:
+        - node: Node you want to rotate. It will consider root in case of nill
+     */
+    func leftRotate(node: BSTNode?) -> Void {
+        let targetNode = node ?? self.root;
+        
+        guard targetNode != nil else {
+            return;
+        }
+        let rotatedNode = targetNode?.leftRotate();
+        
+        if(rotatedNode?.parent == nil) {
+            self.root = rotatedNode;
+        }
+    }
+    
+    /**
+    Rotate give node to right
+    - Parameters:
+       - node: Node you want to rotate. It will consider root in case of nill
+    */
+    func rightRotate(node: BSTNode?) -> Void {
+        let targetNode = node ?? self.root;
+        
+        guard targetNode != nil else {
+            return;
+        }
+        
+        let rotatedNode = targetNode?.rightRotate();
+        
+        if(rotatedNode?.parent == nil) {
+            self.root = rotatedNode;
+        }
     }
 }
