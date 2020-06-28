@@ -18,7 +18,6 @@ class AVLTree: BSTree {
     @discardableResult
     override func addValue(value: Int) -> BSTNode {
         let nNode = super.addValue(value: value);
-        print("Insert : \(nNode.description)");
         
         if let imbalancedNode = self.getImbalancedNode(frmNode: nNode) { // If found imbalancedNode
             self.balanceNode(targetNode: imbalancedNode);
@@ -43,7 +42,6 @@ class AVLTree: BSTree {
             }
             nTravel = nTravel!.parent;
         }
-        print("Imbalance node : \(imbalancedNode?.description ?? "nil")")
         return imbalancedNode;
     }
     
@@ -59,10 +57,8 @@ class AVLTree: BSTree {
         let rightHeight = targetNode.right?.height ?? 0;
         
         if(leftHeight > rightHeight) {
-            print("Perform right rotation")
             self.rightRotate(node: targetNode);
         } else {
-            print("Perform left rotation")
             self.leftRotate(node: targetNode);
         }
     }
