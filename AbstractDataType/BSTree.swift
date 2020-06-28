@@ -80,12 +80,12 @@ class BSTNode: CustomStringConvertible {
     
     /// Print tree structure
     var description: String {
-        var des = "\(value) :";
+        var des = "\(value)";
         
         if let _p = self.parent {
-            des = "\(des) |P|->\(_p.value)"
+            des = "\(des) : |P|->\(_p.value)"
         } else {
-            des = "\(des) |P|->nil"
+            des = "\(des) : |P|->nil"
         }
         
         if let _l = self.left {
