@@ -25,6 +25,15 @@ class AVLTree: BSTree {
         return nNode;
     }
     
+    override func delete(value: Int) {
+        super.delete(value: value);
+        
+        if let _root = self.root {
+            if let imbalancedNode = self.getImbalancedNode(frmNode: _root) { // If found imbalancedNode
+                self.balanceNode(targetNode: imbalancedNode);
+            }
+        }
+    }
     /**
      Get first imbalanced node from give node.
      - Parameters:
