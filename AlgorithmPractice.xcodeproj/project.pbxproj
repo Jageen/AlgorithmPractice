@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		361212CD24799149000B150F /* CloneLinkList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 361212CC24799149000B150F /* CloneLinkList.swift */; };
+		367A5F46248CE01B002214B8 /* AVLTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 367A5F45248CE01B002214B8 /* AVLTree.swift */; };
 		36B43BBC24797916003D83B9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36B43BBB24797916003D83B9 /* AppDelegate.swift */; };
 		36B43BBE24797916003D83B9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36B43BBD24797916003D83B9 /* SceneDelegate.swift */; };
 		36B43BC024797916003D83B9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36B43BBF24797916003D83B9 /* ViewController.swift */; };
@@ -27,6 +28,7 @@
 
 /* Begin PBXFileReference section */
 		361212CC24799149000B150F /* CloneLinkList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloneLinkList.swift; sourceTree = "<group>"; };
+		367A5F45248CE01B002214B8 /* AVLTree.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVLTree.swift; sourceTree = "<group>"; };
 		36B43BB824797916003D83B9 /* AlgorithmPractice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AlgorithmPractice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		36B43BBB24797916003D83B9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		36B43BBD24797916003D83B9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -93,6 +95,7 @@
 			isa = PBXGroup;
 			children = (
 				36FB554224818347003EF708 /* BSTree.swift */,
+				367A5F45248CE01B002214B8 /* AVLTree.swift */,
 				36FB554124818347003EF708 /* Tree.swift */,
 				36B43BD1247979E3003D83B9 /* LinkList.swift */,
 				36B43BD2247979E3003D83B9 /* Queue.swift */,
@@ -185,6 +188,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				36B43BD3247979E3003D83B9 /* Stack.swift in Sources */,
+				367A5F46248CE01B002214B8 /* AVLTree.swift in Sources */,
 				36B43BD824797A38003D83B9 /* MinimumWindow.swift in Sources */,
 				36B43BD5247979E3003D83B9 /* Queue.swift in Sources */,
 				36B43BC024797916003D83B9 /* ViewController.swift in Sources */,
