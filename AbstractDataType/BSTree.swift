@@ -203,7 +203,16 @@ class BSTNode: CustomStringConvertible {
             rightChild = rightChild.rightRotate() ?? rightChild;
         }
         
-        self.parent?.left = rightChild;
+        if let _pRight = self.parent?.right,
+        _pRight.value == self.value{
+            self.parent?.right = rightChild;
+        }
+        
+        if let _pLeft = self.parent?.left,
+        _pLeft.value == self.value{
+            self.parent?.left = rightChild;
+        }
+        
         rightChild.parent = self.parent;
         rightChild.left = self;
         self.parent = rightChild;
@@ -229,9 +238,19 @@ class BSTNode: CustomStringConvertible {
             leftChild = leftChild.leftRotate() ?? leftChild;
         }
         
-        self.parent?.right = leftChild;
-        leftChild.parent = self.parent;
+
+        // TODO: Decide to chose left or right
+        if let _pRight = self.parent?.right,
+        _pRight.value == self.value{
+            self.parent?.right = leftChild;
+        }
         
+        if let _pLeft = self.parent?.left,
+        _pLeft.value == self.value{
+            self.parent?.left = leftChild;
+        }
+        
+        leftChild.parent = self.parent;
         leftChild.right = self;
         self.parent = leftChild;
         self.left = nil;
