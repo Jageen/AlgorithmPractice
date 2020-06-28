@@ -27,7 +27,7 @@ import Foundation
 class BSTNode: CustomStringConvertible {
 
     /// Hold parent node value.
-    fileprivate var parent: BSTNode?
+    internal var parent: BSTNode?
 
     /// Return miminum value node from it's sub stree
     fileprivate var miminum: BSTNode {
@@ -44,7 +44,7 @@ class BSTNode: CustomStringConvertible {
     /**
      Indicate whether given tree is balanced or not.
      */
-    fileprivate var isBalanced:Bool {
+    internal var isBalanced:Bool {
         get {
             let leftHeight = self.left?.height ?? -1
             let rightHeight = self.right?.height ?? -1
@@ -67,7 +67,7 @@ class BSTNode: CustomStringConvertible {
 
     /// Default completion for travel method
     static private let defCompletion = { (aNode:BSTNode) -> Bool in
-        print("\(aNode) : |L|->\(aNode.left?.description ?? "nil") |R|->\(aNode.right?.description ?? "nil")");
+        print(aNode.description);
         return true;
     }
     
@@ -80,7 +80,27 @@ class BSTNode: CustomStringConvertible {
     
     /// Print tree structure
     var description: String {
-        return "\(value)"
+        var des = "\(value) :";
+        
+        if let _p = self.parent {
+            des = "\(des) |P|->\(_p.value)"
+        } else {
+            des = "\(des) |P|->nil"
+        }
+        
+        if let _l = self.left {
+            des = "\(des) : |L|->\(_l.value)"
+        } else {
+            des = "\(des) : |L|->nil"
+        }
+        
+        if let _r = self.right {
+            des = "\(des) : |R|->\(_r.value)"
+        } else {
+            des = "\(des) : |R|->nil"
+        }
+        
+        return des
     }
     
     /**
@@ -170,23 +190,25 @@ class BSTNode: CustomStringConvertible {
      Peform left rotation
      */
     fileprivate func leftRotate() -> BSTNode? {
-        
         if let _ = self.right?.left {
             self.right = self.right?.rightRotate();
         }
         
         // If It does not have right child then return
-        guard let rightChild = self.right else {
+        guard var rightChild = self.right else {
             return nil;
         }
         
         if let _ = rightChild.left {
-            let _ = rightChild.rightRotate();
+            rightChild = rightChild.rightRotate() ?? rightChild;
         }
         
+        self.parent?.left = rightChild;
         rightChild.parent = self.parent;
         rightChild.left = self;
+        self.parent = rightChild;
         self.right = nil;
+        
         return rightChild;
     }
     
@@ -199,12 +221,19 @@ class BSTNode: CustomStringConvertible {
         }
         
         // If It does not have left child then return
-        guard let leftChild = self.left else {
+        guard var leftChild = self.left else {
             return nil;
         }
         
+        if let _ = leftChild.right {
+            leftChild = leftChild.leftRotate() ?? leftChild;
+        }
+        
+        self.parent?.right = leftChild;
         leftChild.parent = self.parent;
+        
         leftChild.right = self;
+        self.parent = leftChild;
         self.left = nil;
         return leftChild;
     }
@@ -277,7 +306,8 @@ class BSTree {
      Add new node into binary tree
      - Parameters: new node
      */
-    func addValue(value:Int) {
+    @discardableResult
+    func addValue(value:Int) -> BSTNode {
         let newNode = BSTNode(value: value);
         if let parentNode = self.searchForPlace(aNode: newNode) {
             if(parentNode.value > value) {
@@ -289,6 +319,7 @@ class BSTree {
         } else {
             root = newNode;
         }
+        return newNode;
     }
     
     func travel() -> Void {
